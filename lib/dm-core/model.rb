@@ -115,6 +115,10 @@ module DataMapper
     # @api semipublic
     def self.append_extensions(*extensions)
       extra_extensions.concat extensions
+      # Add the extension to existing descendants
+      self.descendants.each do |model|
+        extensions.each {|extension| model.extend(extension) }
+      end
       true
     end
 
