@@ -7,7 +7,6 @@ describe DataMapper::Model do
   describe '.append_inclusions' do
     module ::Inclusions
       def new_method
-        true
       end
     end
     
@@ -24,6 +23,10 @@ describe DataMapper::Model do
       it 'should respond to :new_method' do
         User.new.should respond_to(:new_method)
       end
+      
+      after(:all) do
+        DataMapper::Model.extra_inclusions.delete(Inclusions)
+      end
     end
     
     describe 'after the model is defined' do
@@ -38,6 +41,10 @@ describe DataMapper::Model do
       it 'should respond to :new_method' do
         User.new.should respond_to(:new_method)
       end
+      
+      after(:all) do
+        DataMapper::Model.extra_inclusions.delete(Inclusions)
+      end
     end
   end
   
@@ -46,7 +53,6 @@ describe DataMapper::Model do
   describe '.append_extensions' do
     module ::Extensions
       def new_method
-        true
       end
     end
     
@@ -63,6 +69,10 @@ describe DataMapper::Model do
       it 'should respond to :new_method' do
         User.should respond_to(:new_method)
       end
+      
+      after(:all) do
+        DataMapper::Model.extra_extensions.delete(Extensions)
+      end
     end
     
     describe 'after the model is defined' do
@@ -71,11 +81,15 @@ describe DataMapper::Model do
           include DataMapper::Resource
           property :id, Serial
         end
-        DataMapper::Model.append_inclusions(Extensions)
+        DataMapper::Model.append_extensions(Extensions)
       end
       
       it 'should respond to :new_method' do
         User.should respond_to(:new_method)
+      end
+      
+      after(:all) do
+        DataMapper::Model.extra_extensions.delete(Extensions)
       end
     end
   end
