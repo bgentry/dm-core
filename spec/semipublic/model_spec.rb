@@ -77,6 +77,7 @@ describe DataMapper::Model do
 
     describe 'after the model is defined' do
       before :all do
+      
         class ::User
           include DataMapper::Resource
           property :id, Serial
